@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import Header from './components/Header'
-import AddTask from './components/AddTaks'
-import Filter from './components/Filter'
-import TaksList from './components/TaksList'
+import AddTask from './components/AddTask'
+import TasksList from './components/TasksList'
 import Footer from './components/Footer'
 import './App.css'
 
@@ -13,11 +12,10 @@ function App() {
     <>
     <Header/>
     <AddTask/>
-    <Filter/>
-    <TaksList/>
+    <TasksList/>
     <Footer/>
     </>
   )
 }
 
-export default App
+export default App;

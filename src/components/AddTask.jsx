@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Paper, Typography, TextField, Button, Grid } from '@mui/material';
+import { Container, TextField, Button, Grid } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 function AddTask() {
