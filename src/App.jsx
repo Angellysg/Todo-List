@@ -18,12 +18,20 @@ function App() {
     localStorage.setItem('tasks', JSON.stringify(updatedTasks)); // Actualiza el localStorage con las nuevas tareas
   };
 
+  // Función para eliminar una tarea
+  const deleteTask = (taskId) => {
+    const updatedTasks = tasks.filter(task => task.id !== taskId); // Filtra las tareas para eliminar la tarea con el ID especificado
+    setTasks(updatedTasks); // Actualiza el estado de las tareas
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks)); // Actualiza el localStorage con las tareas actualizadas
+  };
+
+
 
   return (
     <>
       <Header />
       <AddTask onAddTask={addTask} />
-      <TasksList tasks={tasks}/> {/* Renderiza el componente para mostrar la lista de tareas y pasa las tareas */}
+      <TasksList tasks={tasks} onDeleteTask={deleteTask} /> {/* Renderiza el componente para mostrar la lista de tareas y pasa las tareas, la función deleteTask como props */}
       <Footer />
     </>
   );
