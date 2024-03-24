@@ -25,13 +25,20 @@ function App() {
     localStorage.setItem('tasks', JSON.stringify(updatedTasks)); // Actualiza el localStorage con las tareas actualizadas
   };
 
-
+  // Función para cambiar el estado de una tarea (completada o no completada)
+  const toggleTask = (taskId) => {
+    const updatedTasks = tasks.map(task =>
+      task.id === taskId ? { ...task, completed: !task.completed } : task
+    ); // Mapea las tareas y cambia el estado de la tarea con el ID especificado
+    setTasks(updatedTasks); // Actualiza el estado de las tareas
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks)); // Actualiza el localStorage con las tareas actualizadas
+  };
 
   return (
     <>
       <Header />
       <AddTask onAddTask={addTask} />
-      <TasksList tasks={tasks} onDeleteTask={deleteTask} /> {/* Renderiza el componente para mostrar la lista de tareas y pasa las tareas, la función deleteTask como props */}
+      <TasksList tasks={tasks} onDeleteTask={deleteTask} onToggleTask={toggleTask} /> {/* Renderiza el componente para mostrar la lista de tareas y pasa las tareas, la función deleteTask y la función toggleTask como props */}
       <Footer />
     </>
   );
