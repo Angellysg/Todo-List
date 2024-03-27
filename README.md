@@ -8,7 +8,7 @@ You can access the live demo of this Todo List app [here](https://todo-list-tawn
 ##
 ![Todo List](todo-list.png)
 ##
-![Todo List](todo-list2.png)
+![Todo List](public/todo-list2.png)
 
 ## Features
 
