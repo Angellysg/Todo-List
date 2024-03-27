@@ -18,6 +18,22 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+.todo-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px; /* Agrega margen inferior para separar del resto del contenido */
+}
+
+.todo-input {
+  flex: 1; /* El campo de entrada de la tarea debe ocupar todo el espacio restante */
+  margin-right: 10px; /* Agrega un pequeño margen entre el campo de entrada y el botón */
+}
+
+.filter-select {
+  width: 150px; /* Define un ancho fijo para el filtro */
+}
+
 
 @keyframes logo-spin {
   from {

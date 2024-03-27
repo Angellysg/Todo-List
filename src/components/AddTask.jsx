@@ -1,20 +1,25 @@
-import React from 'react';
-import { Container, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem, Paper } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem, Paper, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DoneIcon from '@mui/icons-material/Done';
 import { Formik, Form, Field } from 'formik';
 
 function AddTask() {
     // Estado para almacenar las tareas
-    const [tasks, setTasks] = React.useState(() => {
+    const [tasks, setTasks] = useState(() => {
         const storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
         return storedTasks;
     });
+
     // Estado para el filtro seleccionado
-    const [selectedFilter, setSelectedFilter] = React.useState(() => {
+    const [selectedFilter, setSelectedFilter] = useState(() => {
         const storedFilter = localStorage.getItem('selectedFilter') || 'All';
         return storedFilter;
     });
+
+    // Estado para mostrar la ventana emergente cuando se completa una tarea
+    const [showAlert, setShowAlert] = useState(false);
 
     // Manejador para eliminar una tarea
     const handleDeleteTask = (taskId) => {
@@ -30,6 +35,16 @@ function AddTask() {
         );
         setTasks(updatedTasks);
         localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+
+        // Mostrar la ventana emergente solo si la tarea se completa
+        if (!tasks.find(task => task.id === taskId).completed) {
+            setShowAlert(true);
+
+            // Ocultar la ventana emergente después de 2 segundos
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 1000);
+        }
     };
 
     // Manejador para cambiar el filtro seleccionado
@@ -53,7 +68,7 @@ function AddTask() {
 
     return (
         <Container sx={{ width: '100%' }}>
-            {/* Sección para agregar una nueva tarea */}
+            {/* Formulario para agregar una nueva tarea */}
             <Formik
                 initialValues={{ taskInput: '' }}
                 onSubmit={(values, { resetForm }) => {
@@ -71,7 +86,7 @@ function AddTask() {
                 validate={(values) => {
                     const errors = {};
                     if (!values.taskInput.trim()) {
-                        errors.taskInput = 'Cannot be empty';
+                        errors.taskInput = 'The New task field cannot be empty.';
                     } else if (values.taskInput.length > 50) {
                         errors.taskInput = 'Must be 50 characters or less';
                     }
@@ -80,9 +95,9 @@ function AddTask() {
             >
                 {({ errors, touched }) => (
                     <Form>
-                        <Grid container spacing={2} alignItems="flex-start">
-                            <Grid item xs={12} sm={5}>
-                                {/* Campo de entrada de la tarea */}
+                        <Grid container spacing={2} alignItems="center" justifyContent="center">
+                            {/* Campo de entrada de la tarea */}
+                            <Grid item xs={12} sm={6}>
                                 <Field
                                     as={TextField}
                                     fullWidth
@@ -91,23 +106,29 @@ function AddTask() {
                                     label="New Task"
                                     variant="outlined"
                                     error={errors.taskInput && touched.taskInput}
-                                    helperText={errors.taskInput && touched.taskInput && errors.taskInput}
+                                    InputProps={{
+                                        style: {
+                                            borderColor: errors.taskInput && touched.taskInput ? '#B22222' : '#B22222',
+                                        }
+                                    }}
+                                    autoComplete="off" // Evitar sugerencias de autocompletado
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={2}>
-                                {/* Botón para agregar una nueva tarea */}
+                            {/* Botón para enviar la tarea */}
+                            <Grid item xs={12} sm={2} justifyContent="center" alignItems="center">
                                 <Button
                                     type="submit"
                                     fullWidth
                                     variant="contained"
                                     color="primary"
                                     startIcon={<AddIcon />}
+                                    sx={{ '&:focus': { outline: 'none' } }}
                                 >
-                                    Send
+                                    Add
                                 </Button>
                             </Grid>
-                            <Grid item xs={12} sm={5}>
-                                {/* Selector de filtro */}
+                            {/* Selector de filtro */}
+                            <Grid item xs={12} sm={4}>
                                 <FormControl fullWidth>
                                     <InputLabel id="filter-label">Filters</InputLabel>
                                     <Select
@@ -116,6 +137,8 @@ function AddTask() {
                                         value={selectedFilter}
                                         onChange={handleFilterChange}
                                         label="Filter"
+                                        className="filter-select"
+                                        style={{ width: '100%' }}
                                     >
                                         <MenuItem value="All">All</MenuItem>
                                         <MenuItem value="Complete">Complete</MenuItem>
@@ -123,23 +146,92 @@ function AddTask() {
                                     </Select>
                                 </FormControl>
                             </Grid>
+                            {/* Espacio reservado para la alerta de validación */}
+                            <Grid item xs={12} sm={6}>
+                                {errors.taskInput && touched.taskInput && (
+                                    <div style={{ color: '#B22222', textAlign: 'center', marginTop: '5px', marginBottom: '15px', fontSize: '1.2rem' }}>
+                                        {errors.taskInput}
+                                    </div>
+                                )}
+                            </Grid>
                         </Grid>
                     </Form>
                 )}
             </Formik>
+
             {/* Lista de tareas filtradas */}
             {filteredTasks().map((task) => (
-                <Paper key={task.id} style={{ padding: '10px', marginBottom: '5px', display: 'flex', alignItems: 'center' }}>
+                <Paper
+                    key={task.id}
+                    style={{
+                        padding: '10px',
+                        marginBottom: '5px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        backgroundColor: task.completed ? 'lightgrey' : 'white',
+                        
+                        
+                    }}
+                >
                     <div style={{ flex: 1 }}>
-                        {/* Checkbox para cambiar el estado de la tarea */}
-                        <input type="checkbox" checked={task.completed} onChange={() => handleToggleTask(task.id)} />
-                        {/* Texto de la tarea */}
-                        <span style={{ marginLeft: '5px', textDecoration: task.completed ? 'line-through' : 'none' }}>{task.text}</span>
+                        <span
+                            style={{
+                                marginLeft: '5px',
+                                textDecoration: task.completed ? 'line-through' : 'none',
+                                color: task.completed ? 'grey' : 'inherit',
+                                fontSize: '1.2rem',
+                                
+                            }}
+                        >
+                            {task.text}
+                        </span>
                     </div>
+                    {/* Botón para completar la tarea */}
+                    <Button
+                        onClick={() => handleToggleTask(task.id)}
+                        sx={{
+                            minWidth: 'auto',
+                            '&:focus': {
+                                outline:                             'none',
+                            },
+                            backgroundColor: task.completed ? 'green' : 'inherit',
+                            color: task.completed ? '#FFFFFF' : 'inherit',
+                            '& .MuiSvgIcon-root': {
+                                color: task.completed ? '#FFFFFF' : 'green',
+                            },
+                            '&:hover': {
+                                backgroundColor: 'lightgrey',
+                            },
+                        }}
+                    >
+                        <DoneIcon />
+                    </Button>
                     {/* Botón para eliminar la tarea */}
-                    <Button onClick={() => handleDeleteTask(task.id)}><DeleteIcon /></Button>
+                    <Button
+                        onClick={() => handleDeleteTask(task.id)}
+                        sx={{
+                            minWidth: 'auto',
+                            '&:focus': {
+                                outline: 'none',
+                            },
+                            color: task.completed ? 'grey' : 'success',
+                            fontSize: '1.2rem',
+                            '&:hover': {
+                                backgroundColor: 'lightgrey',
+                            },
+                        }}
+                    >
+                        <DeleteIcon />
+                    </Button>
                 </Paper>
             ))}
+            {/* Ventana emergente para mostrar el mensaje de tarea completada */}
+            <Dialog open={showAlert} onClose={() => setShowAlert(false)} sx={{ textAlign: 'center' }}>
+                <DialogTitle>You completed a task!</DialogTitle>
+                <DialogContent>
+                    <DoneIcon sx={{ fontSize: 64, color: 'green' }} />
+                </DialogContent>
+            </Dialog>
         </Container>
     );
 }

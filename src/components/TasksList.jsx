@@ -13,7 +13,7 @@ function TaskItem({ task, onDelete, onToggle }) {
     };
 
     return (
-        <Container>
+        <Container sx={{textAlign: 'center' }}>
             {/* Contenido de la tarea */}
         </Container>
     );
@@ -45,14 +45,15 @@ function TasksList({ tasks, onDeleteTask, onToggleTask }) {
 
     return (
         // Renderiza la lista de tareas
-        <Container sx={{ Width: '100%' }}>
-            {/* Mapea sobre las tareas y renderiza un componente TaskItem por cada una */}
+        <Container sx={{ width: '100%' , textAlign: 'center'}}>
+            {/* Renderiza la lista de tareas */}
             {tasks.map((task) => (
                 <TaskItem
                     key={task.id}
                     task={task}
                     onDelete={handleDeleteTask}
                     onToggle={handleToggleTask}
+                    
                 />
             ))}
         </Container>
