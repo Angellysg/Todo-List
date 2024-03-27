@@ -94,70 +94,73 @@ function AddTask() {
                 }}
             >
                 {({ errors, touched }) => (
-                    <Form>
-                        <Grid container spacing={2} alignItems="center" justifyContent="center">
-                            {/* Campo de entrada de la tarea */}
-                            <Grid item xs={12} sm={6}>
-                                <Field
-                                    as={TextField}
-                                    fullWidth
-                                    id="task-input"
-                                    name="taskInput"
-                                    label="New Task"
-                                    variant="outlined"
-                                    error={errors.taskInput && touched.taskInput}
-                                    InputProps={{
-                                        style: {
-                                            borderColor: errors.taskInput && touched.taskInput ? '#B22222' : '#B22222',
-                                        }
-                                    }}
-                                    autoComplete="off" // Evitar sugerencias de autocompletado
-                                />
-                            </Grid>
-                            {/* Botón para enviar la tarea */}
-                            <Grid item xs={12} sm={2} justifyContent="center" alignItems="center">
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    startIcon={<AddIcon />}
-                                    sx={{ '&:focus': { outline: 'none' } }}
-                                >
-                                    Add
-                                </Button>
-                            </Grid>
-                            {/* Selector de filtro */}
-                            <Grid item xs={12} sm={4}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="filter-label">Filters</InputLabel>
-                                    <Select
-                                        labelId="filter-label"
-                                        id="filter"
-                                        value={selectedFilter}
-                                        onChange={handleFilterChange}
-                                        label="Filter"
-                                        className="filter-select"
-                                        style={{ width: '100%' }}
+                    <Form style={{ position: 'fixed', top: '140px', width: '80%', left: '10%', right: '10%', zIndex: '2000' }}>
+                        <Container sx={{ width: '100%' }}>
+                            <Grid container spacing={2} alignItems="center" justifyContent="center">
+                                {/* Campo de entrada de la tarea */}
+                                <Grid item xs={12} sm={6}>
+                                    <Field
+                                        as={TextField}
+                                        fullWidth
+                                        id="task-input"
+                                        name="taskInput"
+                                        label="New Task"
+                                        variant="outlined"
+                                        error={errors.taskInput && touched.taskInput}
+                                        InputProps={{
+                                            style: {
+                                                borderColor: errors.taskInput && touched.taskInput ? '#B22222' : '#B22222',
+                                            }
+                                        }}
+                                        autoComplete="off" // Evitar sugerencias de autocompletado
+                                    />
+                                </Grid>
+                                {/* Botón para enviar la tarea */}
+                                <Grid item xs={12} sm={2} justifyContent="center" alignItems="center">
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        startIcon={<AddIcon />}
+                                        sx={{ '&:focus': { outline: 'none' } }}
                                     >
-                                        <MenuItem value="All">All</MenuItem>
-                                        <MenuItem value="Complete">Complete</MenuItem>
-                                        <MenuItem value="Incomplete">Incomplete</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                        Add
+                                    </Button>
+                                </Grid>
+                                {/* Selector de filtro */}
+                                <Grid item xs={12} sm={4}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="filter-label">Filters</InputLabel>
+                                        <Select
+                                            labelId="filter-label"
+                                            id="filter"
+                                            value={selectedFilter}
+                                            onChange={handleFilterChange}
+                                            label="Filter"
+                                            className="filter-select"
+                                            style={{ width: '100%' }}
+                                        >
+                                            <MenuItem value="All">All</MenuItem>
+                                            <MenuItem value="Complete">Complete</MenuItem>
+                                            <MenuItem value="Incomplete">Incomplete</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                {/* Espacio reservado para la alerta de validación */}
+                                <Grid item xs={12} sm={6}>
+                                    {errors.taskInput && touched.taskInput && (
+                                        <div style={{ color: '#B22222', textAlign: 'center', marginTop: '5px', marginBottom: '15px', fontSize: '1.2rem' }}>
+                                            {errors.taskInput}
+                                        </div>
+                                    )}
+                                </Grid>
                             </Grid>
-                            {/* Espacio reservado para la alerta de validación */}
-                            <Grid item xs={12} sm={6}>
-                                {errors.taskInput && touched.taskInput && (
-                                    <div style={{ color: '#B22222', textAlign: 'center', marginTop: '5px', marginBottom: '15px', fontSize: '1.2rem' }}>
-                                        {errors.taskInput}
-                                    </div>
-                                )}
-                            </Grid>
-                        </Grid>
+                        </Container>
                     </Form>
                 )}
             </Formik>
+
 
             {/* Lista de tareas filtradas */}
             {filteredTasks().map((task) => (
@@ -169,8 +172,8 @@ function AddTask() {
                         display: 'flex',
                         alignItems: 'center',
                         backgroundColor: task.completed ? 'lightgrey' : 'white',
-                        
-                        
+                        width: '50%'
+
                     }}
                 >
                     <div style={{ flex: 1 }}>
@@ -180,7 +183,7 @@ function AddTask() {
                                 textDecoration: task.completed ? 'line-through' : 'none',
                                 color: task.completed ? 'grey' : 'inherit',
                                 fontSize: '1.2rem',
-                                
+
                             }}
                         >
                             {task.text}
@@ -192,7 +195,7 @@ function AddTask() {
                         sx={{
                             minWidth: 'auto',
                             '&:focus': {
-                                outline:                             'none',
+                                outline: 'none',
                             },
                             backgroundColor: task.completed ? 'green' : 'inherit',
                             color: task.completed ? '#FFFFFF' : 'inherit',
