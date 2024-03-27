@@ -45,7 +45,7 @@ function TasksList({ tasks, onDeleteTask, onToggleTask }) {
 
     return (
         // Renderiza la lista de tareas
-        <Container maxWidth="md" sx={{ marginTop: '2rem' }}>
+        <Container sx={{ Width: '100%' }}>
             {/* Mapea sobre las tareas y renderiza un componente TaskItem por cada una */}
             {tasks.map((task) => (
                 <TaskItem

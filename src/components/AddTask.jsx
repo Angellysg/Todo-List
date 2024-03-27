@@ -33,8 +33,8 @@ function AddTask() {
     };
 
     // Manejador para cambiar el filtro seleccionado
-    const handleFilterChange = (event) => {
-        const filterValue = event.target.value;
+    const handleFilterChange = (e) => {
+        const filterValue = e.target.value;
         setSelectedFilter(filterValue);
         localStorage.setItem('selectedFilter', filterValue);
     };
@@ -52,7 +52,7 @@ function AddTask() {
     };
 
     return (
-        <Container maxWidth="md" sx={{ marginTop: '2rem' }}>
+        <Container sx={{ width: '100%' }}>
             {/* Sección para agregar una nueva tarea */}
             <Formik
                 initialValues={{ taskInput: '' }}
@@ -81,7 +81,7 @@ function AddTask() {
                 {({ errors, touched }) => (
                     <Form>
                         <Grid container spacing={2} alignItems="flex-start">
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} sm={5}>
                                 {/* Campo de entrada de la tarea */}
                                 <Field
                                     as={TextField}
@@ -94,7 +94,7 @@ function AddTask() {
                                     helperText={errors.taskInput && touched.taskInput && errors.taskInput}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={3}>
+                            <Grid item xs={12} sm={2}>
                                 {/* Botón para agregar una nueva tarea */}
                                 <Button
                                     type="submit"
@@ -106,7 +106,7 @@ function AddTask() {
                                     Send
                                 </Button>
                             </Grid>
-                            <Grid item xs={12} sm={3}>
+                            <Grid item xs={12} sm={5}>
                                 {/* Selector de filtro */}
                                 <FormControl fullWidth>
                                     <InputLabel id="filter-label">Filters</InputLabel>

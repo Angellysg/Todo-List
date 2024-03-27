@@ -39,7 +39,7 @@ function App() {
       <Header />
       <AddTask onAddTask={addTask} />
       <TasksList tasks={tasks} onDeleteTask={deleteTask} onToggleTask={toggleTask} /> {/* Renderiza el componente para mostrar la lista de tareas y pasa las tareas, la función deleteTask y la función toggleTask como props */}
-      <Footer />
+      <Footer/>
     </>
   );
 }
