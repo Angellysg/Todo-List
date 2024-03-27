@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from '@mui/material';
+import { Container, Paper, Button } from '@mui/material';
 
 // Componente funcional TaskItem para representar una tarea individual
 function TaskItem({ task, onDelete, onToggle }) {
@@ -13,49 +13,44 @@ function TaskItem({ task, onDelete, onToggle }) {
     };
 
     return (
-        <Container sx={{textAlign: 'center' }}>
-            {/* Contenido de la tarea */}
+        <Container sx={{ textAlign: 'center', marginBottom: '10px', margin: '10px', overflowY: 'auto' }}>
+
         </Container>
     );
 }
 
 // Componente funcional TasksList para mostrar la lista de tareas
 function TasksList({ tasks, onDeleteTask, onToggleTask }) {
-    // Manejador para eliminar una tarea
+    // Manejadores para eliminar y cambiar el estado de una tarea
     const handleDeleteTask = (taskId) => {
-        // Filtra las tareas para eliminar la tarea con el ID especificado
         const updatedTasks = tasks.filter(task => task.id !== taskId);
-        // Llama a la función onDeleteTask pasando el ID de la tarea
         onDeleteTask(taskId);
-        // Actualiza el localStorage con las tareas actualizadas
         localStorage.setItem('tasks', JSON.stringify(updatedTasks));
     };
 
-    // Manejador para cambiar el estado de una tarea
     const handleToggleTask = (taskId) => {
-        // Mapea las tareas y cambia el estado de la tarea con el ID especificado
         const updatedTasks = tasks.map(task =>
             task.id === taskId ? { ...task, completed: !task.completed } : task
         );
-        // Llama a la función onToggleTask pasando el ID de la tarea
         onToggleTask(taskId);
-        // Actualiza el localStorage con las tareas actualizadas
         localStorage.setItem('tasks', JSON.stringify(updatedTasks));
     };
 
     return (
         // Renderiza la lista de tareas
-        <Container sx={{ width: '100%' , textAlign: 'center'}}>
-            {/* Renderiza la lista de tareas */}
-            {tasks.map((task) => (
-                <TaskItem
-                    key={task.id}
-                    task={task}
-                    onDelete={handleDeleteTask}
-                    onToggle={handleToggleTask}
-                    
-                />
-            ))}
+        <Container sx={{ height: 'auto', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px', maxHeight: '70vh', overflowY: 'auto' }}>
+            {/* Contenedor para las tareas */}
+            <Container sx={{ width: '80%', textAlign: 'center' }}>
+                {/* Renderiza la lista de tareas en el orden en que se reciben */}
+                {tasks.map((task) => (
+                    <TaskItem
+                        key={task.id}
+                        task={task}
+                        onDelete={handleDeleteTask}
+                        onToggle={handleToggleTask}
+                    />
+                ))}
+            </Container>
         </Container>
     );
 }

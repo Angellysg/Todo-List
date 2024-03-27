@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem, Paper, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Container, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem, Paper, Dialog, DialogTitle, DialogContent, DialogActions, Box } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
@@ -68,7 +68,7 @@ function AddTask() {
 
     return (
         <Container sx={{ width: '100%' }}>
-            {/* Formulario para agregar una nueva tarea */}
+            {/* Sección para agregar una nueva tarea */}
             <Formik
                 initialValues={{ taskInput: '' }}
                 onSubmit={(values, { resetForm }) => {
@@ -86,150 +86,173 @@ function AddTask() {
                 validate={(values) => {
                     const errors = {};
                     if (!values.taskInput.trim()) {
-                        errors.taskInput = 'The New task field cannot be empty.';
+                        errors.taskInput = 'The New task field cannot be empty';
                     } else if (values.taskInput.length > 50) {
                         errors.taskInput = 'Must be 50 characters or less';
                     }
                     return errors;
-                }}
-            >
+                }}>
                 {({ errors, touched }) => (
                     <Form style={{ position: 'fixed', top: '140px', width: '80%', left: '10%', right: '10%', zIndex: '2000' }}>
-                        <Container sx={{ width: '100%' }}>
-                            <Grid container spacing={2} alignItems="center" justifyContent="center">
-                                {/* Campo de entrada de la tarea */}
-                                <Grid item xs={12} sm={6}>
-                                    <Field
-                                        as={TextField}
-                                        fullWidth
-                                        id="task-input"
-                                        name="taskInput"
-                                        label="New Task"
-                                        variant="outlined"
-                                        error={errors.taskInput && touched.taskInput}
-                                        InputProps={{
-                                            style: {
-                                                borderColor: errors.taskInput && touched.taskInput ? '#B22222' : '#B22222',
-                                            }
-                                        }}
-                                        autoComplete="off" // Evitar sugerencias de autocompletado
-                                    />
-                                </Grid>
-                                {/* Botón para enviar la tarea */}
-                                <Grid item xs={12} sm={2} justifyContent="center" alignItems="center">
-                                    <Button
-                                        type="submit"
-                                        fullWidth
-                                        variant="contained"
-                                        color="primary"
-                                        startIcon={<AddIcon />}
-                                        sx={{ '&:focus': { outline: 'none' } }}
-                                    >
-                                        Add
-                                    </Button>
-                                </Grid>
-                                {/* Selector de filtro */}
-                                <Grid item xs={12} sm={4}>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="filter-label">Filters</InputLabel>
-                                        <Select
-                                            labelId="filter-label"
-                                            id="filter"
-                                            value={selectedFilter}
-                                            onChange={handleFilterChange}
-                                            label="Filter"
-                                            className="filter-select"
-                                            style={{ width: '100%' }}
-                                        >
-                                            <MenuItem value="All">All</MenuItem>
-                                            <MenuItem value="Complete">Complete</MenuItem>
-                                            <MenuItem value="Incomplete">Incomplete</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                                {/* Espacio reservado para la alerta de validación */}
-                                <Grid item xs={12} sm={6}>
-                                    {errors.taskInput && touched.taskInput && (
-                                        <div style={{ color: '#B22222', textAlign: 'center', marginTop: '5px', marginBottom: '15px', fontSize: '1.2rem' }}>
-                                            {errors.taskInput}
-                                        </div>
-                                    )}
-                                </Grid>
+                        <Grid container spacing={2} alignItems="center" justifyContent="center">
+                            {/* Campo de entrada de la tarea */}
+                            <Grid item xs={12} sm={6}>
+                                <Field
+                                    as={TextField}
+                                    fullWidth
+                                    id="task-input"
+                                    name="taskInput"
+                                    label="New Task"
+                                    variant="outlined"
+                                    error={errors.taskInput && touched.taskInput}
+                                    InputProps={{
+                                        style: {
+                                            borderColor: errors.taskInput && touched.taskInput ? '#B22222' : '#B22222',
+                                        },
+                                        maxLength: 50, // Limitar a 50 caracteres
+                                    }}
+                                    autoComplete="off" // Evitar sugerencias de autocompletado
+                                />
                             </Grid>
-                        </Container>
+                            {/* Botón para enviar la tarea */}
+                            <Grid item xs={12} sm={2} justifyContent="center" alignItems="center">
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<AddIcon />}
+                                    sx={{ '&:focus': { outline: 'none' } }}
+                                >
+                                    Add
+                                </Button>
+                            </Grid>
+                            {/* Selector de filtro */}
+                            <Grid item xs={12} sm={4}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="filter-label">Filters</InputLabel>
+                                    <Select
+                                        labelId="filter-label"
+                                        id="filter"
+                                        value={selectedFilter}
+                                        onChange={handleFilterChange}
+                                        label="Filter"
+                                        className="filter-select"
+                                        style={{ width: '100%' }}
+                                    >
+                                        <MenuItem value="All">All</MenuItem>
+                                        <MenuItem value="Complete">Complete</MenuItem>
+                                        <MenuItem value="Incomplete">Incomplete</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            {/* Espacio reservado para la alerta de validación */}
+                            <Grid item xs={12} sm={6}>
+                                {errors.taskInput && touched.taskInput && (
+                                    <div style={{ color: '#B22222', textAlign: 'center', marginTop: '5px', marginBottom: '5px', fontSize: '1.2rem' }}>
+                                        {errors.taskInput}
+                                    </div>
+                                )}
+                            </Grid>
+                        </Grid>
                     </Form>
                 )}
             </Formik>
-
-
-            {/* Lista de tareas filtradas */}
-            {filteredTasks().map((task) => (
-                <Paper
-                    key={task.id}
-                    style={{
-                        padding: '10px',
-                        marginBottom: '5px',
+            <Container
+                sx={{
+                    width: '100%',
+                    margin: 'auto',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyItems: 'center',
+                    flexDirection: 'column',
+                    zIndex: '1000',
+                    '@media (min-width:600px)': {
+                        left: '10%',
+                        right: '10%',
+                    },
+                }}>
+                {/* Lista de tareas filtradas */}
+                <Box
+                    sx={{
+                        width: '100%',
+                        marginTop: '2px', // Reducir el espacio desde la parte superior del formulario
                         display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'center',
-                        backgroundColor: task.completed ? 'lightgrey' : 'white',
-                        width: '50%'
-
+                        position: 'fixed',
+                        top: '36%',
                     }}
                 >
-                    <div style={{ flex: 1 }}>
-                        <span
+                    {filteredTasks().map((task) => (
+                        <Paper
+                            key={task.id}
                             style={{
-                                marginLeft: '5px',
-                                textDecoration: task.completed ? 'line-through' : 'none',
-                                color: task.completed ? 'grey' : 'inherit',
-                                fontSize: '1.2rem',
+                                padding: '10px',
+                                marginBottom: '10px', // Ajuste del margen inferior
+                                display: 'flex',
+                                alignItems: 'center',
+                                backgroundColor: task.completed ? 'lightgrey' : 'white',
+                                width: '45%',
 
                             }}
                         >
-                            {task.text}
-                        </span>
-                    </div>
-                    {/* Botón para completar la tarea */}
-                    <Button
-                        onClick={() => handleToggleTask(task.id)}
-                        sx={{
-                            minWidth: 'auto',
-                            '&:focus': {
-                                outline: 'none',
-                            },
-                            backgroundColor: task.completed ? 'green' : 'inherit',
-                            color: task.completed ? '#FFFFFF' : 'inherit',
-                            '& .MuiSvgIcon-root': {
-                                color: task.completed ? '#FFFFFF' : 'green',
-                            },
-                            '&:hover': {
-                                backgroundColor: 'lightgrey',
-                            },
-                        }}
-                    >
-                        <DoneIcon />
-                    </Button>
-                    {/* Botón para eliminar la tarea */}
-                    <Button
-                        onClick={() => handleDeleteTask(task.id)}
-                        sx={{
-                            minWidth: 'auto',
-                            '&:focus': {
-                                outline: 'none',
-                            },
-                            color: task.completed ? 'grey' : 'success',
-                            fontSize: '1.2rem',
-                            '&:hover': {
-                                backgroundColor: 'lightgrey',
-                            },
-                        }}
-                    >
-                        <DeleteIcon />
-                    </Button>
-                </Paper>
-            ))}
+                            {/* Contenido de la tarea */}
+                            <div style={{ flex: 1 }}>
+                                <span
+                                    style={{
+                                        marginLeft: '5px',
+                                        textDecoration: task.completed ? 'line-through' : 'none',
+                                        color: task.completed ? 'grey' : 'inherit',
+                                        fontSize: '1.2rem',
+                                    }}
+                                >
+                                    {task.text}
+                                </span>
+                            </div>
+                            {/* Botón para completar la tarea */}
+                            <Button
+                                onClick={() => handleToggleTask(task.id)}
+                                sx={{
+                                    minWidth: 'auto',
+                                    '&:focus': {
+                                        outline: 'none',
+                                    },
+                                    backgroundColor: task.completed ? 'green' : 'inherit',
+                                    color: task.completed ? '#FFFFFF' : 'inherit',
+                                    '& .MuiSvgIcon-root': {
+                                        color: task.completed ? '#FFFFFF' : 'green',
+                                    },
+                                    '&:hover': {
+                                        backgroundColor: 'lightgrey',
+                                    },
+                                }}
+                            >
+                                <DoneIcon />
+                            </Button>
+                            {/* Botón para eliminar la tarea */}
+                            <Button
+                                onClick={() => handleDeleteTask(task.id)}
+                                sx={{
+                                    minWidth: 'auto',
+                                    '&:focus': {
+                                        outline: 'none',
+                                    },
+                                    color: task.completed ? 'grey' : 'success',
+                                    fontSize: '1.2rem',
+                                    '&:hover': {
+                                        backgroundColor: 'lightgrey',
+                                    },
+                                }}
+                            >
+                                <DeleteIcon />
+                            </Button>
+                        </Paper>
+                    ))}
+                </Box>
+            </Container>
             {/* Ventana emergente para mostrar el mensaje de tarea completada */}
-            <Dialog open={showAlert} onClose={() => setShowAlert(false)} sx={{ textAlign: 'center' }}>
+            <Dialog open={showAlert} onClose={() => setShowAlert(false)} sx={{ textAlign: 'center', zIndex: '3000' }}>
                 <DialogTitle>You completed a task!</DialogTitle>
                 <DialogContent>
                     <DoneIcon sx={{ fontSize: 64, color: 'green' }} />
