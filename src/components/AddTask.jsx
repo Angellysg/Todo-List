@@ -176,7 +176,7 @@ function AddTask() {
                 <Box
                     sx={{
                         width: '100%',
-                        marginTop: '2px', // Reducir el espacio desde la parte superior del formulario
+                        marginTop: '68px', // Reducir el espacio desde la parte superior del formulario
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
